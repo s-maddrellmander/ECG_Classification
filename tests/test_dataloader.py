@@ -1,10 +1,12 @@
 import numpy as np
 import pandas as pd
+import pytest 
 
 from data_loader import get_subclasses, get_superclasses, get_train_test_split
 
-
+@pytest.mark.skip()
 def test_get_superclasses():
+    # TODO: Both these tests need moving away from the actual data for CI
     path = 'physionet.org/files/ptb-xl/1.0.3/'
     agg_df = pd.read_csv(path + 'scp_statements.csv', index_col=0)
     agg_df = agg_df[agg_df.diagnostic == 1]
@@ -32,8 +34,9 @@ def test_get_superclasses():
     assert Y["diagnostic_superclass"].max() == 2
     assert len(Y) == 4
 
-
+@pytest.mark.skip()
 def test_get_subclasses():
+    # TODO: Both these tests need moving away from the actual data for CI
     path = 'physionet.org/files/ptb-xl/1.0.3/'
     agg_df = pd.read_csv(path + 'scp_statements.csv', index_col=0)
     agg_df = agg_df[agg_df.diagnostic == 1]
