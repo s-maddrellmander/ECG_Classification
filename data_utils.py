@@ -40,8 +40,22 @@ def preprocess_data(X, y, batch_size=1024):
     y = np.array(y.tolist())
     
     dataset = ECG_Dataset(X, y)
-    dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True,
-                            collate_fn=collate_fn)
+    try:
+        import poptorch
+        options = poptorch.Options()
+        options.outputMode(poptorch.OutputMode.All)
+        options.deviceIterations(10)
+        dataloader = poptorch.DataLoader(poptorch.Options(),
+                                    dataset=dataset,
+                                    batch_size=batch_size,
+                                    collate_fn=collate_fn,
+                                    shuffle=True,
+                                    num_workers=16)
+        IS_IPU = True
+    except ImportError:
+        dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True,
+                                collate_fn=collate_fn)
+        IS_IPU = False
     logging.info(f"Loaded data into dataloader")
     train_features, train_labels = next(iter(dataloader))
     logging.info(f"Feature batch shape: {train_features.size()}")
