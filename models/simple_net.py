@@ -8,7 +8,6 @@ from tqdm import tqdm
 
 
 class NeuralNetwork(nn.Module):
-
     def __init__(self):
         super(NeuralNetwork, self).__init__()
         self.flatten = nn.Flatten()

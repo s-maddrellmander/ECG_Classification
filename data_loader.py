@@ -18,7 +18,6 @@ def load_raw_data(df, sampling_rate, path):
 
 
 def get_superclasses(Y, agg_df):
-
     def aggregate_diagnostic(y_dic):
         tmp = []
         for key in y_dic.keys():
@@ -42,7 +41,6 @@ def get_superclasses(Y, agg_df):
 
 
 def get_subclasses(Y, agg_df):
-
     def aggregate_diagnostic(y_dic):
         tmp = []
         for key in y_dic.keys():

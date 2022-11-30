@@ -7,7 +7,6 @@ from functools import partial
 
 
 class ECG_Dataset(Dataset):
-
     def __init__(self, data, targets):
         # self.data = torch.tensor(data).to(torch.float32)
         # self.targets = torch.LongTensor(targets)
