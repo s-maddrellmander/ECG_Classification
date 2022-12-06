@@ -24,6 +24,8 @@ class ECG_Dataset(Dataset):
 def preprocess_data(X, y):
     logging.info(f"Building Dataset")
     # Convert y list of values into numpy array
+    # Transpose the order of the dimmensions here
+    X = np.transpose(X , (0, 2, 1))
     y = np.array(y.tolist())
     
     dataset = ECG_Dataset(X, y)

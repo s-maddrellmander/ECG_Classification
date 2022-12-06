@@ -8,5 +8,5 @@ lint:
 	yapf --recursive --in-place .
 
 test:
-	pytest --forked -n 10
+	python3 -m pytest -s -v --cache-clear --cov=. tests/
 
