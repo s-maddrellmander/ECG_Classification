@@ -1,9 +1,11 @@
 import numpy as np
 import pandas as pd
+import pytest
 
 from data_loader import get_subclasses, get_superclasses, get_train_test_split
 
 
+@pytest.mark.skip()
 def test_get_superclasses():
     path = 'physionet.org/files/ptb-xl/1.0.3/'
     agg_df = pd.read_csv(path + 'scp_statements.csv', index_col=0)
@@ -33,6 +35,7 @@ def test_get_superclasses():
     assert len(Y) == 4
 
 
+@pytest.mark.skip()
 def test_get_subclasses():
     path = 'physionet.org/files/ptb-xl/1.0.3/'
     agg_df = pd.read_csv(path + 'scp_statements.csv', index_col=0)
