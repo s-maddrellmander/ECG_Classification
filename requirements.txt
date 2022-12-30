@@ -34,6 +34,7 @@ isort==5.10.1
 jedi==0.18.1
 Jinja2==3.1.2
 joblib==1.2.0
+jsonargparse==4.18.0
 jsonschema==4.17.0
 jupyter==1.0.0
 jupyter-console==6.4.4
@@ -78,6 +79,7 @@ pytest==7.2.0
 pytest-cov==4.0.0
 python-dateutil==2.8.2
 pytz==2022.6
+PyYAML==6.0
 pyzmq==24.0.1
 qtconsole==5.4.0
 QtPy==2.3.0
@@ -97,6 +99,8 @@ tinycss2==1.2.1
 toml==0.10.2
 tomli==2.0.1
 torch==1.13.0
+torch-summary==1.4.5
+torchsummary==1.5.1
 tornado==6.2
 tqdm==4.64.1
 traitlets==5.5.0
@@ -107,4 +111,5 @@ webencodings==0.5.1
 websocket-client==1.4.2
 wfdb==4.0.0
 widgetsnbextension==4.0.3
+yapf==0.32.0
 zipp==3.10.0
