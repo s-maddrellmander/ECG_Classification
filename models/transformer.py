@@ -172,15 +172,15 @@ def train_transformer(trainloader, testloader, opts):
     # in_channels = trainloader.dataset.data[0].shape[0]
     # num_classes = trainloader.dataset.targets.max() + 1
 
-    model = TransformerModel(ntoken=256,
-                             emb_dim=32,
+    model = TransformerModel(ntoken=opts.model.n_token,
+                             emb_dim=opts.model.emb_dim,
                              nhead=opts.model.n_head,
                              nhid=opts.model.n_hid,
                              nlayers=opts.model.n_layers,
                              dropout=opts.model.dropout,
                              nclasses=5)
     summary(model, input_size=(1000, 12), batch_size=-1)
-    total_epochs = 10
+    total_epochs = opts.model.epochs
     criterion = nn.CrossEntropyLoss()
     regression_criterion = nn.MSELoss()
     optimizer = optim.Adam(model.parameters(), lr=0.001)
