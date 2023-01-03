@@ -57,7 +57,5 @@ class TestParseCmdArgs:
         except SystemExit as error:
             # TODO: Check this is actually being run
             assert type(error) == SystemExit
-        
-        
 
     # TODO: Add a test for args and wandb as well - may be a seperate test location
