@@ -59,10 +59,6 @@ def parse_cmd_args():
                         type=int,
                         help="Number of epochs to train for")
 
-    try:
-        args = parser.parse_args()
-    except SystemExit as error:
-        logging.info("Check the args for capitalisation or spelling.")
-        return error
+    args = parser.parse_args()
 
     return args
