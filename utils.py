@@ -49,6 +49,19 @@ def parse_cmd_args():
                         default=0.1,
                         type=float,
                         help="Dropout rate for Transformer layers")
+    # Add model arguments to work with new transformer architecture
+    parser.add_argument("--model.hidden_size", default=128, type=int, help="Transformer Encoder hidden dimmension")
+    parser.add_argument("--model.intermediate_size", default=128, type=int, help="Feed Forward intermediate dimmension")
+    parser.add_argument("--model.embed_dim", default=128, type=int, help="Transformer Encoder embedding dimmension")
+    parser.add_argument("--model.num_heads", default=4, type=int, help="Number of heads for Multi-Headed self attention")
+    parser.add_argument("--model.num_hidden_layers", default=4, type=int, help="Number of Multi-Headed self attention layers in the encoder")
+    parser.add_argument("--model.hidden_dropout_prob", default=0.1, type=float, help="Dropout Probability")
+    parser.add_argument("--model.vocab_size", default=10000, type=int, help="Vocab size for embedding")  # NOTE: This will go later
+    parser.add_argument("--model.max_position_embeddings", default=1000, type=int, help="Max sequence length")
+    parser.add_argument("--model.num_labels", type=int, default=5, help="Number of class labels to predict")
+    
+    
+    
     # Training dynamics arguments
     parser.add_argument("--model.learning_rate",
                         default=0.001,

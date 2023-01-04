@@ -1,10 +1,14 @@
 import logging
+import sys
 import torch
 import torch.nn as nn
 import pytest
 from torchsummary import summary
 
 from models.transformer import TransformerModel, BaseEncoder
+from models.transformer import TransformerForSequenceClassification
+
+from utils import parse_cmd_args
 
 
 @pytest.mark.parametrize("in_x, n_emb, dim_emb, out_y", [(4, 10, 3, 3),
@@ -32,10 +36,33 @@ class TestTransformerModel:
         # configure self.attribute
         self.datum = torch.rand((1, 1000, 12))
         assert self.datum.shape == (1, 1000, 12)
+        
+        # Set and get default command line args
+        sys.argv[1:] = []
+        config = parse_cmd_args()
+        config.model.vocab_size = 256
+        config.model.embed_dim = 128
+        config.model.num_heads = 4
+        config.model.hidden_size = 128
+        config.model.num_hidden_layers = 2
+        config.model.num_labels = 5
+        self.hf_transformer = TransformerForSequenceClassification(config.model)
 
     def teardown_method(self, ):
         # tear down self.attribute
         pass
+    
+    def test_compare_model_parameters(self):
+        summary_base = summary(self.model,
+                              input_size=(1000, 12),
+                              batch_size=-1,
+                              verbose=1) 
+        summary_hf = summary(self.hf_transformer,
+                              input_size=(1000, 12),
+                              batch_size=-1,
+                              verbose=1)
+        
+        assert summary_base.summary_list[4].num_params == summary_hf.summary_list[7].num_params
 
     def test_encoder(self, ):
         assert self.model.float_encoder(self.datum).shape == (1, 1000, 128)
