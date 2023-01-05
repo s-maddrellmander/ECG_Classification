@@ -13,7 +13,7 @@ from data_utils import preprocess_data
 from models.simple_classifier import simple_decision_tree_calssifier
 from models.simple_net import train_simple_net
 from models.conv_net import train_conv_net
-from models.transformer import train_transformer
+from models.transformer import train_transformer, test_dummy_transformer
 from utils import Timer, parse_cmd_args
 
 
@@ -52,6 +52,7 @@ def main(args):
     if args.model.name == "Transformer":
         with Timer("Transformer Model"):
             train_transformer(dataloader_train, dataloader_test, opts=args)
+            # test_dummy_transformer(args)
 
 
 if __name__ == "__main__":
