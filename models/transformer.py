@@ -20,7 +20,8 @@ import torch.nn.functional as F
 def scaled_dot_product_attention(query, key, value):
     # Core attention function - this is worth sketching out the dimmensions for
     dim_k = query.size(-1)  # Get the last dimmension
-    scores = torch.bmm(query, key.transpose(1, 2)) / torch.sqrt(dim_k)
+    scores = torch.bmm(query, key.transpose(1, 2)) / torch.sqrt(
+        torch.tensor(dim_k))
     weights = F.softmax(scores, dim=-1)
     return torch.bmm(weights, value)
 
@@ -51,7 +52,7 @@ class MultiHeadAttention(nn.Module):
             [AttentionHead(embed_dim, head_dim) for _ in range(num_heads)])
         self.output_layer = nn.Linear(embed_dim, embed_dim)
 
-    def forawrd(self, hidden_state):
+    def forward(self, hidden_state):
         x = torch.cat([head(hidden_state) for head in self.heads], dim=-1)
         x = self.output_layer(x)
         return x
@@ -94,11 +95,14 @@ class Embeddings(nn.Module):
 
     def __init__(self, config) -> None:
         super().__init__()
-        self.token_embeddings = nn.Embedding(config.vocab_size,
-                                             config.hidden_size)
+        # self.token_embeddings = nn.Embedding(config.vocab_size,
+        #                                      config.hidden_size)
+        # assert config.embed_dim == config.hidden_size
+        self.token_embeddings = BaseEncoder(config.num_channels,
+                                            config.embed_dim)
         self.positional_embeddings = nn.Embedding(
-            config.max_position_embeddings, config.hidden_size)
-        self.layer_norm = nn.LayerNorm(config.hidden_size, eps=1e-12)
+            config.max_position_embeddings, config.embed_dim)
+        self.layer_norm = nn.LayerNorm(config.embed_dim, eps=1e-12)
         self.dropout = nn.Dropout()
 
     def forward(self, input_ids):
@@ -118,7 +122,8 @@ class TransformerEncoder(nn.Module):
         super().__init__()
         self.embeddings = Embeddings(config)
         self.layers = nn.ModuleList([
-            TransformerEncoderLayer(config) for _ in range(config.num_hidden_layers)
+            TransformerEncoderLayer(config)
+            for _ in range(config.num_hidden_layers)
         ])
 
     def forward(self, x):
@@ -137,13 +142,14 @@ class TransformerForSequenceClassification(nn.Module):
         self.classifier = nn.Linear(config.hidden_size, config.num_labels)
 
     def forward(self, x):
-        self.encoder(
+        x = self.encoder(
             x
         )[:,
           0, :]  # This is to select the [CLS] token state TODO: Need to add this to datastructre
         x = self.dropout(x)
         x = self.classifier(x)
         return x
+
 
 def test_dummy_transformer(config):
     model = TransformerForSequenceClassification(config.model)
@@ -170,7 +176,7 @@ class Pooler(torch.nn.Module):
 
 class BaseEncoder(torch.nn.Module):
 
-    def __init__(self, n_inputs, n_layers=2, n_hidden=128) -> None:
+    def __init__(self, n_inputs, n_hidden=128) -> None:
         super().__init__()
         self.layer_0 = nn.Linear(n_inputs, n_hidden)
         # self.layers = [nn.Linear]
@@ -311,13 +317,14 @@ def train_transformer(trainloader, testloader, opts):
     # in_channels = trainloader.dataset.data[0].shape[0]
     # num_classes = trainloader.dataset.targets.max() + 1
 
-    model = TransformerModel(ntoken=opts.model.n_token,
-                             emb_dim=opts.model.emb_dim,
-                             nhead=opts.model.n_head,
-                             nhid=opts.model.n_hid,
-                             nlayers=opts.model.n_layers,
-                             dropout=opts.model.dropout,
-                             nclasses=5)
+    # model = TransformerModel(ntoken=opts.model.n_token,
+    #                          emb_dim=opts.model.emb_dim,
+    #                          nhead=opts.model.n_head,
+    #                          nhid=opts.model.n_hid,
+    #                          nlayers=opts.model.n_layers,
+    #                          dropout=opts.model.dropout,
+    #                          nclasses=5)
+    model = TransformerForSequenceClassification(opts.model)
     summary(model, input_size=(1000, 12), batch_size=-1)
     total_epochs = opts.model.epochs
     criterion = nn.CrossEntropyLoss()

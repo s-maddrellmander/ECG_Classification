@@ -51,8 +51,8 @@ def main(args):
             train_conv_net(dataloader_train, dataloader_test)
     if args.model.name == "Transformer":
         with Timer("Transformer Model"):
-            # train_transformer(dataloader_train, dataloader_test, opts=args)
-            test_dummy_transformer(args)
+            train_transformer(dataloader_train, dataloader_test, opts=args)
+            # test_dummy_transformer(args)
 
 
 if __name__ == "__main__":
